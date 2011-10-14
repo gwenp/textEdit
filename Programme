@@ -1,0 +1,41 @@
+#!/usr/bin/env python
+#
+# [SNIPPET_NAME: Base]
+# [SNIPPET_CATEGORIES: PyGTK]
+# [SNIPPET_DESCRIPTION: Create a base window]
+# [SNIPPET_DOCS: http://www.pygtk.org/pygtk2tutorial/ch-GettingStarted.html]
+
+# example base.py
+
+import pygtk
+pygtk.require('2.0')
+import gtk
+import gtk.glade
+import gtksourceview2
+import Editor.SourceView
+import MenuBar
+
+class Base:
+	def __init__(self):
+		#Set the Glade file
+		self.gladefile = "ui2.glade"  
+		self.wTree = gtk.glade.XML(self.gladefile) 
+		
+		#Get the Main Window, and connect the "destroy" event
+		self.window = self.wTree.get_widget("MainWindow")
+		self.window.mainMenuBar = MenuBar.MainMenuBar(self.wTree)
+		
+		self.window.vbox1 = self.wTree.get_widget("vbox1")
+		self.window.mainViewport = self.wTree.get_widget("mainViewport")
+
+		self.window.view = Editor.SourceView.view
+		
+		self.window.mainViewport.add(self.window.view)
+		
+		self.window.show_all();
+		if (self.window):
+			self.window.connect("destroy", gtk.main_quit)
+
+if __name__ == "__main__":
+	app = Base()
+	gtk.main()
